@@ -1,0 +1,71 @@
+.app-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+.admin-toggle-secret {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  z-index: 9999;
+  cursor: default;
+  /* Invisible but clickable area in top right */
+}
+
+/* Dynamic Animated Background */
+.ambient-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(45deg, #050505, #0a0a0a, #050505);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.7; /* Increased opacity so it's super visible */
+  animation: float 10s infinite ease-in-out alternate; /* Faster animation */
+}
+
+.orb-1 {
+  width: 50vw;
+  height: 50vw;
+  max-width: 500px;
+  max-height: 500px;
+  background: radial-gradient(circle, rgba(0,229,255,0.4) 0%, rgba(0,0,0,0) 70%);
+  top: 0%;
+  left: 0%;
+}
+
+.orb-2 {
+  width: 50vw;
+  height: 50vw;
+  max-width: 500px;
+  max-height: 500px;
+  background: radial-gradient(circle, rgba(41,121,255,0.4) 0%, rgba(0,0,0,0) 70%);
+  bottom: 0%;
+  right: 0%;
+  animation-delay: -5s;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(10%, 10%) scale(1.1); }
+  100% { transform: translate(-5%, 5%) scale(0.9); }
+}

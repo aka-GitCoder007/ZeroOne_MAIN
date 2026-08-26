@@ -1,0 +1,51 @@
+.intro-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000; /* Use pure black for video seamlessness */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.intro-container.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.video-wrapper {
+  position: relative;
+  width: 90vw;
+  max-width: 600px; /* Keep it small enough so it's sharp and crisp */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.intro-video {
+  width: 100%;
+  height: auto;
+  border-radius: 16px; /* Classy rounded corners */
+  /* Glow removed as requested */
+  
+  /* Mild enhancement without crunching pixels */
+  filter: contrast(1.05) saturate(1.1);
+  image-rendering: auto;
+}
+
+/* Watermark blocker overlay adjusted for the smaller video */
+.video-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 120px;
+  height: 35px;
+  background-color: #000; /* Pure black to match the video background */
+  z-index: 2;
+  border-radius: 4px;
+}
