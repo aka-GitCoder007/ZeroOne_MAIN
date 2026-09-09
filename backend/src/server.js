@@ -42,6 +42,7 @@ app.use((req, res, next) => {
 
 const allowedOrigins = [
     process.env.CLIENT_URL,
+    process.env.CLIENT_URL?.replace(/\/$/, ''),
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'http://localhost:3001'
@@ -49,8 +50,8 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: (origin, callback) => {
-        // Allow requests with no origin (like mobile apps or curl) or explicitly allowed origins
-        if (!origin || allowedOrigins.includes(origin)) {
+        // Allow requests with no origin or explicitly allowed origins
+        if (!origin || allowedOrigins.includes(origin) || (origin && origin.endsWith('.vercel.app'))) {
             return callback(null, true);
         }
         if (process.env.NODE_ENV !== 'production') {
