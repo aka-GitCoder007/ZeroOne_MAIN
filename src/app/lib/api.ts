@@ -9,7 +9,7 @@ import {
   PaymentRecord
 } from "../types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://zeroone-main-mx5h.onrender.com/api/v1";
 
 const AUTH_TOKEN_KEY = "zeroone_admin_token";
 
