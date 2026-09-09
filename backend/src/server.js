@@ -82,6 +82,14 @@ app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 // Database Connection
 connectDB();
 
+app.get('/', (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'ZER0ONE Backend Server is Live',
+        timestamp: new Date().toISOString()
+    });
+});
+
 // Health Check Endpoint
 app.get('/api/health', (req, res) => {
     res.status(200).json({
