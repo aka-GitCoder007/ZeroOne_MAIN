@@ -21,7 +21,7 @@ body {
   color: var(--text-primary);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 a {
@@ -78,6 +78,22 @@ button {
   transform: scale(1.02);
 }
 
+/* Global Responsive Container */
+.container {
+  width: min(100% - 2rem, 1400px);
+  margin-inline: auto;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Touch target enhancement for interactive elements */
+button, a, input, select, textarea {
+  touch-action: manipulation;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -97,9 +113,20 @@ button {
   animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-slide-up,
+  .glass-panel {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg-color);

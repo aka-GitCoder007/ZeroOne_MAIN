@@ -19,8 +19,7 @@
 
 .video-wrapper {
   position: relative;
-  width: 90vw;
-  max-width: 600px; /* Keep it small enough so it's sharp and crisp */
+  width: min(90vw, 600px);
   display: flex;
   justify-content: center;
   align-items: center;

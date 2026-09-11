@@ -33,7 +33,7 @@ export const sendQuotationEmail = async (quotationData) => {
             return { success: false, reason: 'RESEND_API_KEY not configured' };
         }
 
-        const receiver = process.env.QUOTE_RECEIVER_EMAIL || 'freelancehq26@gmail.com';
+        const receiver = process.env.QUOTE_RECEIVER_EMAIL || 'freelancehq@gmail.com';
         const senderDomain = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
 
         const safeFullName = escapeHtml(quotationData.fullName);
@@ -138,8 +138,13 @@ export const sendQuotationEmail = async (quotationData) => {
         });
 
         if (error) {
-            console.error('[EmailService] Resend API error:', error.message || error);
-            return { success: false, error: error.message };
+            console.error(
+                '[EmailService] Resend API error details:',
+                JSON.stringify(error)
+            );
+            throw new Error(
+                `Resend API Error: ${error.message || JSON.stringify(error)}`
+            );
         }
 
         console.log(`[EmailService] Quotation notification sent via Resend. ID: ${data?.id}`);

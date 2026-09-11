@@ -57,10 +57,20 @@ export const createQuotation = async (req, res, next) => {
             status: 'New'
         });
 
-        // Trigger email service (non-blocking log handling inside emailService)
-        sendQuotationEmail(quotation).catch(err => {
-            console.error('[QuotationController] Background email trigger failed:', err.message);
-        });
+        sendQuotationEmail(quotation)
+            .then(result => {
+                if (result?.success) {
+                    console.log(
+                        `[QuotationController] Email sent successfully for ${quotation.requestId}`
+                    );
+                }
+            })
+            .catch(err => {
+                console.error(
+                    `[QuotationController] Background email dispatch failed for ${quotation.requestId}:`,
+                    err.message
+                );
+            });
 
         res.status(201).json({
             success: true,

@@ -1,5 +1,5 @@
 .client-reviews-container {
-  padding: 40px 5% 80px 5%;
+  padding: clamp(24px, 4vw, 40px) 4% 80px 4%;
   position: relative;
   z-index: 1;
   max-width: 1400px;
@@ -9,7 +9,7 @@
 /* Hero Section */
 .reviews-hero {
   text-align: center;
-  padding: 40px 20px 60px 20px;
+  padding: clamp(24px, 4vw, 40px) 16px 40px;
 }
 
 .hero-badge {
@@ -27,16 +27,17 @@
 }
 
 .reviews-title {
-  font-size: 3.2rem;
+  font-size: clamp(2rem, 5vw + 0.8rem, 3.2rem);
   font-weight: 700;
   letter-spacing: 2px;
   margin-bottom: 15px;
   text-transform: uppercase;
+  line-height: 1.15;
 }
 
 .reviews-subtitle {
   color: var(--text-secondary);
-  font-size: 1.15rem;
+  font-size: clamp(0.95rem, 1.5vw + 0.5rem, 1.15rem);
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
@@ -49,8 +50,8 @@
 
 .reviews-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: clamp(16px, 3vw, 32px);
 }
 
 .project-review-card {
@@ -281,14 +282,13 @@
 }
 
 .reviews-modal-content {
-  width: 100%;
-  max-width: 540px;
-  max-height: 88vh;
+  width: min(94%, 540px);
+  max-height: 90vh;
   overflow-y: auto;
   background: rgba(12, 12, 16, 0.95);
   border: 1px solid rgba(0, 229, 255, 0.2);
   border-radius: 20px;
-  padding: 32px;
+  padding: clamp(20px, 4vw, 32px);
   position: relative;
   display: flex;
   flex-direction: column;

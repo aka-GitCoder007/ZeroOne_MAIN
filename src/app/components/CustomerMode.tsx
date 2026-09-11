@@ -178,33 +178,71 @@ export default function CustomerMode() {
     return true;
   });
 
+  // Mobile Navigation State
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="customer-mode animate-fade-in">
       {/* Header */}
       <header className="header glass-panel">
-        <div className="logo-small text-replica" onClick={() => setActiveTab("work")} style={{ cursor: "pointer" }}>
-          Z E R <span className="slashed-o">O</span> O N E
+        <div className="header-brand-row">
+          <div
+            className="logo-small text-replica"
+            onClick={() => {
+              setActiveTab("work");
+              setMobileMenuOpen(false);
+            }}
+            style={{ cursor: "pointer" }}
+          >
+            Z E R <span className="slashed-o">O</span> O N E
+          </div>
+          <button
+            className={`mobile-menu-toggle ${mobileMenuOpen ? "open" : ""}`}
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            aria-label="Toggle Navigation Menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            <span className="bar"></span>
+            <span className="bar"></span>
+            <span className="bar"></span>
+          </button>
         </div>
-        <nav className="header-nav">
+
+        <nav className={`header-nav ${mobileMenuOpen ? "mobile-open" : ""}`}>
           <button
             className={`nav-tab ${activeTab === "work" ? "active" : ""}`}
-            onClick={() => setActiveTab("work")}
+            onClick={() => {
+              setActiveTab("work");
+              setMobileMenuOpen(false);
+            }}
           >
             WORK
           </button>
           <button
             className={`nav-tab ${activeTab === "reviews" ? "active" : ""}`}
-            onClick={() => setActiveTab("reviews")}
+            onClick={() => {
+              setActiveTab("reviews");
+              setMobileMenuOpen(false);
+            }}
           >
             CLIENT REVIEWS
           </button>
           <button
             className={`nav-tab ${activeTab === "quotation" ? "active" : ""}`}
-            onClick={() => setActiveTab("quotation")}
+            onClick={() => {
+              setActiveTab("quotation");
+              setMobileMenuOpen(false);
+            }}
           >
             QUOTATION
           </button>
-          <button className="btn-primary btn-pay" onClick={() => setShowPayment(true)}>
+          <button
+            className="btn-primary btn-pay"
+            onClick={() => {
+              setShowPayment(true);
+              setMobileMenuOpen(false);
+            }}
+          >
             Pay Us
           </button>
         </nav>

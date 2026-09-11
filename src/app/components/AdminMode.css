@@ -2,7 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100dvh;
+  padding: 20px;
 }
 
 .login-box {
@@ -310,7 +311,73 @@
   transition: color 0.2s ease;
 }
 
+.admin-dashboard {
+  padding: 20px 4%;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
 .btn-remove-image:hover {
   color: #ff1744;
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .login-box {
+    padding: 24px 16px;
+    width: 100%;
+  }
+
+  .employee-section {
+    padding: 18px 14px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 14px 10px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .export-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .export-actions button {
+    width: 100%;
+  }
+
+  .add-project-form input,
+  .add-project-form select {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
 }
 
