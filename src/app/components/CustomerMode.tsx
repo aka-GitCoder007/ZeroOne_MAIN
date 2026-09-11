@@ -654,12 +654,23 @@ export default function CustomerMode() {
                   <button type="button" onClick={() => { setGetItProject(null); setInterestSuccess(false); }}>Cancel</button>
                   <button
                     className="btn-get-it"
-                    onClick={() => {
+                    onClick={async () => {
                       if (!interestName.trim() || !interestEmail.trim()) return;
-                      window.open(
-                        `mailto:contact@zerone.in?subject=${encodeURIComponent("Interest in " + getItProject.name)}&body=${encodeURIComponent(interestMessage + "\n\nFrom: " + interestName + "\nEmail: " + interestEmail)}`,
-                        "_blank"
-                      );
+                      try {
+                        await api.quotations.create({
+                          fullName: interestName,
+                          email: interestEmail,
+                          projectName: `Interest: ${getItProject.name}`,
+                          description: interestMessage || `Interested in ${getItProject.name}`,
+                          services: ["Innovation Hub"],
+                          budget: typeof getItProject.price === "number" ? `₹${getItProject.price}` : "Custom",
+                          timeline: "Flexible",
+                          phone: "N/A",
+                          contactPreference: ["Email"],
+                        });
+                      } catch (err) {
+                        console.error("Failed to post interest quotation:", err);
+                      }
                       setInterestSuccess(true);
                     }}
                   >
