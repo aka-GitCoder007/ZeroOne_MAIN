@@ -183,8 +183,13 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
     e.preventDefault();
     setProjectFormError(null);
 
-    if (!newCustomer || !newName || !newPrice || !newDate) {
-      setProjectFormError("Customer Name, Project Name, Price, and Date are required.");
+    if (!newName || !newPrice || !newDate) {
+      setProjectFormError("Project Name, Price, and Date are required.");
+      return;
+    }
+
+    if (newShowInClientReviews && !newCustomer.trim()) {
+      setProjectFormError("Customer Name is required when uploading to Client Reviews section.");
       return;
     }
 
@@ -195,12 +200,12 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
     }
 
     const payload: Partial<Project> = {
-      customerName: newCustomer,
+      customerName: newCustomer.trim() || "ZER0ONE",
       name: newName,
       image: newImageUrl || undefined,
       websiteUrl: newWebsiteUrl || undefined,
       price: parseInt(newPrice),
-      status: newStatus,
+      status: newShowInClientReviews ? newStatus : "Delivered",
       date: newDate,
       // Upload to only the selected sections
       showInWork: newShowInWork,
@@ -273,8 +278,12 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
     if (!editModalProject) return;
     setEditModalError(null);
 
-    if (!editModalCustomer.trim() || !editModalName.trim() || !editModalPrice || !editModalDate) {
-      setEditModalError("Customer Name, Project Name, Price, and Date are required.");
+    if (!editModalName.trim() || !editModalPrice || !editModalDate) {
+      setEditModalError("Project Name, Price, and Date are required.");
+      return;
+    }
+    if (editModalShowInClientReviews && !editModalCustomer.trim()) {
+      setEditModalError("Customer Name is required when displaying in Client Reviews Section.");
       return;
     }
     if (!editModalShowInWork && !editModalShowInClientReviews) {
@@ -285,12 +294,12 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
     setEditModalSaving(true);
     const projId = String(editModalProject._id || editModalProject.id);
     const res = await api.projects.update(projId, {
-      customerName: editModalCustomer.trim(),
+      customerName: editModalCustomer.trim() || "ZER0ONE",
       name: editModalName.trim(),
       image: editModalImageUrl || undefined,
       websiteUrl: editModalWebsiteUrl || undefined,
       price: parseInt(editModalPrice),
-      status: editModalStatus,
+      status: editModalShowInClientReviews ? editModalStatus : "Delivered",
       date: editModalDate,
       showInWork: editModalShowInWork,
       showInClientReviews: editModalShowInClientReviews,
@@ -607,10 +616,10 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
             <form className="add-project-form" onSubmit={handleSaveProject}>
               <input
                 type="text"
-                placeholder="Customer Name"
+                placeholder={newShowInClientReviews ? "Customer Name *" : "Customer Name (Client Reviews only)"}
                 value={newCustomer}
                 onChange={(e) => setNewCustomer(e.target.value)}
-                required
+                required={newShowInClientReviews}
               />
               <input
                 type="text"
@@ -674,7 +683,12 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                 onChange={(e) => setNewPrice(e.target.value)}
                 required
               />
-              <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}>
+              <select
+                value={newStatus}
+                onChange={(e) => setNewStatus(e.target.value)}
+                style={{ opacity: newShowInClientReviews ? 1 : 0.6 }}
+                title={newShowInClientReviews ? "Delivery Status" : "Status (Client Reviews only)"}
+              >
                 <option value="Pending">Pending</option>
                 <option value="Delivered">Delivered</option>
               </select>
@@ -931,10 +945,10 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
               {/* Customer Name */}
               <input
                 type="text"
-                placeholder="Customer Name"
+                placeholder={editModalShowInClientReviews ? "Customer Name *" : "Customer Name (Client Reviews only)"}
                 value={editModalCustomer}
                 onChange={(e) => setEditModalCustomer(e.target.value)}
-                required
+                required={editModalShowInClientReviews}
                 style={{ padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.9rem" }}
               />
               {/* Project Name */}
@@ -980,7 +994,8 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
               <select
                 value={editModalStatus}
                 onChange={(e) => setEditModalStatus(e.target.value)}
-                style={{ padding: "10px 14px", borderRadius: "8px", background: "#111", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.9rem" }}
+                style={{ padding: "10px 14px", borderRadius: "8px", background: "#111", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.9rem", opacity: editModalShowInClientReviews ? 1 : 0.6 }}
+                title={editModalShowInClientReviews ? "Delivery Status" : "Status (Client Reviews only)"}
               >
                 <option value="Pending">Pending</option>
                 <option value="Delivered">Delivered</option>

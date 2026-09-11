@@ -89,7 +89,11 @@ export const validateProjectPayload = (req, res, next) => {
 
     if (req.method === 'POST') {
         if (!customerName || typeof customerName !== 'string' || !customerName.trim()) {
-            return res.status(400).json({ success: false, message: 'Customer name is required' });
+            if (showInClientReviews) {
+                return res.status(400).json({ success: false, message: 'Customer name is required for Client Reviews' });
+            } else {
+                req.body.customerName = 'ZER0ONE';
+            }
         }
         if (!name || typeof name !== 'string' || !name.trim()) {
             return res.status(400).json({ success: false, message: 'Project name is required' });
