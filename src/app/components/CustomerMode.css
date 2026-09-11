@@ -376,6 +376,34 @@
   50% { transform: scale(1.4); opacity: 0.5; }
 }
 
+@keyframes bounceSpin {
+  0%   { transform: translateY(0) rotate(0deg) scale(1); }
+  25%  { transform: translateY(-10px) rotate(-10deg) scale(1.15); }
+  50%  { transform: translateY(0) rotate(0deg) scale(1); }
+  75%  { transform: translateY(-6px) rotate(10deg) scale(1.08); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); }
+}
+
+@keyframes spinRing {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes nodePulse {
+  0%, 100% { opacity: 1; r: attr(r); filter: drop-shadow(0 0 3px #00eaff); }
+  50%       { opacity: 0.3; filter: none; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { stroke-opacity: 0.9; filter: drop-shadow(0 0 4px #00eaff88); }
+  50%       { stroke-opacity: 0.4; filter: none; }
+}
+
+@keyframes coreGlow {
+  0%, 100% { r: 7px; opacity: 0.08; }
+  50%       { r: 12px; opacity: 0.18; }
+}
+
 .live-link-pill {
   background: rgba(0, 0, 0, 0.6);
   border: 1px solid rgba(0, 229, 255, 0.5);

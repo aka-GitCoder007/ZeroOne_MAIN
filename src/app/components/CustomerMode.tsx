@@ -266,10 +266,59 @@ export default function CustomerMode() {
 
           <section className="showcase">
             {loadingProjects ? (
-              <div className="empty-state glass-panel" style={{ padding: "40px", textAlign: "center" }}>
-                <div className="empty-icon">❖</div>
-                <h3>LOADING SHOWCASE ARCHITECTURE...</h3>
-                <p>Fetching real-time project portfolio entries from MongoDB Atlas...</p>
+              <div className="empty-state glass-panel" style={{ padding: "48px 40px", textAlign: "center" }}>
+                {/* JARVIS AI Brain SVG */}
+                <div style={{ display: "inline-block", marginBottom: "20px", position: "relative" }}>
+                  <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ overflow: "visible" }}>
+                    {/* Rotating outer ring */}
+                    <circle cx="50" cy="50" r="46" stroke="#00eaff" strokeWidth="1" strokeDasharray="8 4" opacity="0.4" style={{ animation: "spinRing 4s linear infinite", transformOrigin: "50px 50px" }} />
+                    {/* Counter-rotating dashed ring */}
+                    <circle cx="50" cy="50" r="40" stroke="#7b2fff" strokeWidth="0.8" strokeDasharray="4 8" opacity="0.35" style={{ animation: "spinRing 6s linear infinite reverse", transformOrigin: "50px 50px" }} />
+
+                    {/* Brain outline — left hemisphere */}
+                    <path d="M50 22 C36 22 24 30 22 42 C20 52 24 60 30 65 C28 70 30 76 35 78 C38 80 42 79 44 77 L44 72 C40 70 38 66 40 62" stroke="#00eaff" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.9" style={{ animation: "glowPulse 2s ease-in-out infinite" }} />
+                    {/* Brain outline — right hemisphere */}
+                    <path d="M50 22 C64 22 76 30 78 42 C80 52 76 60 70 65 C72 70 70 76 65 78 C62 80 58 79 56 77 L56 72 C60 70 62 66 60 62" stroke="#00eaff" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.9" style={{ animation: "glowPulse 2s ease-in-out infinite 0.3s" }} />
+                    {/* Center divide */}
+                    <line x1="50" y1="22" x2="50" y2="77" stroke="#7b2fff" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
+
+                    {/* Neural circuit lines — left */}
+                    <path d="M40 62 C36 58 30 55 28 50" stroke="#00eaff" strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.5" />
+                    <path d="M36 45 C32 42 30 38 33 34" stroke="#00eaff" strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.5" />
+                    <path d="M44 40 C40 36 38 32 40 28" stroke="#7b2fff" strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.6" />
+                    <path d="M44 52 C38 50 34 52 30 50" stroke="#00eaff" strokeWidth="0.8" strokeLinecap="round" fill="none" opacity="0.4" />
+
+                    {/* Neural circuit lines — right */}
+                    <path d="M60 62 C64 58 70 55 72 50" stroke="#00eaff" strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.5" />
+                    <path d="M64 45 C68 42 70 38 67 34" stroke="#00eaff" strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.5" />
+                    <path d="M56 40 C60 36 62 32 60 28" stroke="#7b2fff" strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.6" />
+                    <path d="M56 52 C62 50 66 52 70 50" stroke="#00eaff" strokeWidth="0.8" strokeLinecap="round" fill="none" opacity="0.4" />
+
+                    {/* Glowing neural nodes */}
+                    <circle cx="50" cy="50" r="3.5" fill="#00eaff" style={{ animation: "nodePulse 1.4s ease-in-out infinite" }} />
+                    <circle cx="36" cy="45" r="2" fill="#7b2fff" style={{ animation: "nodePulse 1.4s ease-in-out infinite 0.2s" }} />
+                    <circle cx="64" cy="45" r="2" fill="#7b2fff" style={{ animation: "nodePulse 1.4s ease-in-out infinite 0.4s" }} />
+                    <circle cx="30" cy="50" r="1.5" fill="#00eaff" style={{ animation: "nodePulse 1.4s ease-in-out infinite 0.6s" }} />
+                    <circle cx="70" cy="50" r="1.5" fill="#00eaff" style={{ animation: "nodePulse 1.4s ease-in-out infinite 0.8s" }} />
+                    <circle cx="44" cy="40" r="1.5" fill="#00eaff" style={{ animation: "nodePulse 1.4s ease-in-out infinite 0.1s" }} />
+                    <circle cx="56" cy="40" r="1.5" fill="#00eaff" style={{ animation: "nodePulse 1.4s ease-in-out infinite 0.5s" }} />
+                    <circle cx="33" cy="34" r="1.5" fill="#7b2fff" style={{ animation: "nodePulse 1.4s ease-in-out infinite 0.7s" }} />
+                    <circle cx="67" cy="34" r="1.5" fill="#7b2fff" style={{ animation: "nodePulse 1.4s ease-in-out infinite 0.9s" }} />
+                    <circle cx="40" cy="28" r="1.5" fill="#00eaff" style={{ animation: "nodePulse 1.4s ease-in-out infinite 0.3s" }} />
+                    <circle cx="60" cy="28" r="1.5" fill="#00eaff" style={{ animation: "nodePulse 1.4s ease-in-out infinite 1.1s" }} />
+                    <circle cx="35" cy="78" r="1.5" fill="#00eaff" style={{ animation: "nodePulse 1.4s ease-in-out infinite 0.15s" }} />
+                    <circle cx="65" cy="78" r="1.5" fill="#00eaff" style={{ animation: "nodePulse 1.4s ease-in-out infinite 0.45s" }} />
+
+                    {/* Center core glow */}
+                    <circle cx="50" cy="50" r="7" fill="#00eaff" opacity="0.08" style={{ animation: "coreGlow 2s ease-in-out infinite" }} />
+                  </svg>
+                </div>
+                <h3 style={{ fontSize: "1.3rem", fontWeight: 700, color: "#00eaff", letterSpacing: "1px", marginBottom: "10px", textTransform: "none" }}>
+                  Training neurons on awesomeness...
+                </h3>
+                <p style={{ color: "#aaa", fontSize: "0.95rem", fontStyle: "italic" }}>
+                  404 boredom not found — cool projects incoming! ⚡
+                </p>
               </div>
             ) : projectsError ? (
               <div className="empty-state glass-panel" style={{ padding: "40px", textAlign: "center" }}>
