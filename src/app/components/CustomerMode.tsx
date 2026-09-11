@@ -7,7 +7,11 @@ import { Project, Review } from "../types";
 import api from "../lib/api";
 import "./CustomerMode.css";
 
-export default function CustomerMode() {
+interface CustomerModeProps {
+  onToggleAdmin?: () => void;
+}
+
+export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
   const [activeTab, setActiveTab] = useState<"work" | "reviews" | "quotation">("work");
   const [reviews, setReviews] = useState<Review[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);

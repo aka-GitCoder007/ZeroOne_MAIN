@@ -42,7 +42,7 @@ export default function Home() {
       ></div>
 
       {mode === "customer" ? (
-        <CustomerMode />
+        <CustomerMode onToggleAdmin={() => setMode("admin")} />
       ) : (
         <AdminMode onLogout={() => setMode("customer")} />
       )}
