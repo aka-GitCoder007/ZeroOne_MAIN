@@ -237,7 +237,7 @@ export default function CustomerMode() {
               <span>🧠 INNOVATION HUB</span>
             </div>
             <h1 className="hero-title">
-              Ideas Born at <span className="text-gradient">ZER0ONE</span>
+              BUILD WHAT DOESN'T <span className="text-gradient">EXISTS.</span>
             </h1>
             <p className="hero-subtitle">
               Explore our original concepts, rate what excites you, and grab what you love.
