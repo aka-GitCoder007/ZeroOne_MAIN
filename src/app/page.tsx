@@ -22,23 +22,6 @@ export default function Home() {
     setShowIntro(false);
   };
 
-  const [secretClicks, setSecretClicks] = useState(0);
-
-  const handleSecretClick = () => {
-    setSecretClicks((prev) => {
-      const count = prev + 1;
-      if (count >= 3) {
-        setMode((current) => (current === "customer" ? "admin" : "customer"));
-        return 0;
-      }
-      return count;
-    });
-
-    setTimeout(() => {
-      setSecretClicks(0);
-    }, 1000);
-  };
-
   if (showIntro) {
     return <IntroAnimation onComplete={handleIntroComplete} />;
   }
@@ -51,11 +34,11 @@ export default function Home() {
         <div className="glow-orb orb-2"></div>
       </div>
 
-      {/* Hidden toggle for Admin (requires 3 rapid clicks in top right corner) */}
+      {/* Hidden toggle for Admin (click top right corner) */}
       <div 
         className="admin-toggle-secret"
-        onClick={handleSecretClick}
-        title="Triple-click for Admin Mode"
+        onClick={() => setMode(mode === "customer" ? "admin" : "customer")}
+        title="Toggle Admin Mode"
       ></div>
 
       {mode === "customer" ? (
