@@ -9,9 +9,9 @@
   right: 0;
   width: 50px;
   height: 50px;
-  z-index: 9999;
+  z-index: 90;
   cursor: default;
-  /* Invisible but clickable area in top right */
+  /* Invisible secret area in top right */
 }
 
 /* Dynamic Animated Background */

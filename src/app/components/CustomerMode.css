@@ -11,7 +11,7 @@
   padding: 12px 4%;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   border-radius: 0 0 16px 16px;
   border-top: none;
   max-width: 1400px;
@@ -36,6 +36,8 @@
   width: 32px;
   height: 24px;
   border-radius: 4px;
+  position: relative;
+  z-index: 1001;
 }
 
 .mobile-menu-toggle .bar {
@@ -857,7 +859,7 @@ textarea:focus {
     border-radius: 0 0 14px 14px;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
   }
 
   .header-brand-row {
