@@ -21,13 +21,19 @@ export default function CustomerMode() {
   // Modal and Form States in CustomerMode WORK view
   const [selectedProject, setSelectedProject] = useState<number | string | null>(null);
   const [inspectProject, setInspectProject] = useState<Project | null>(null);
-  const [projectFilter, setProjectFilter] = useState<"ALL" | "DELIVERED" | "PENDING">("ALL");
   const [reviewText, setReviewText] = useState("");
   const [reviewAuthor, setReviewAuthor] = useState("");
   const [reviewStars, setReviewStars] = useState(5);
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
   const [reviewSubmitError, setReviewSubmitError] = useState<string | null>(null);
   const [reviewSubmitSuccess, setReviewSubmitSuccess] = useState(false);
+
+  // Get It / Interest Modal States
+  const [getItProject, setGetItProject] = useState<Project | null>(null);
+  const [interestName, setInterestName] = useState("");
+  const [interestEmail, setInterestEmail] = useState("");
+  const [interestMessage, setInterestMessage] = useState("");
+  const [interestSuccess, setInterestSuccess] = useState(false);
 
   // Payment Modal States
   const [showPayment, setShowPayment] = useState(false);
@@ -172,11 +178,7 @@ export default function CustomerMode() {
     return gradients[charCodeSum % gradients.length];
   };
 
-  const filteredProjects = projects.filter((p) => {
-    if (projectFilter === "DELIVERED") return p.status === "Delivered";
-    if (projectFilter === "PENDING") return p.status === "Pending";
-    return true;
-  });
+
 
   return (
     <div className="customer-mode animate-fade-in">
@@ -232,36 +234,14 @@ export default function CustomerMode() {
         <>
           <section className="hero">
             <div className="hero-badge animate-fade-in">
-              <span>❖ EXCLUSIVE PORTFOLIO SHOWCASE</span>
+              <span>🧠 INNOVATION HUB</span>
             </div>
             <h1 className="hero-title">
-              Build What <span className="text-gradient">Doesn't Exist</span>
+              Ideas Born at <span className="text-gradient">ZER0ONE</span>
             </h1>
             <p className="hero-subtitle">
-              Explore our past works, custom software systems & luxury web applications.
+              Explore our original concepts, rate what excites you, and grab what you love.
             </p>
-
-            {/* Category / Status Filter Pills */}
-            <div className="project-filter-bar">
-              <button
-                className={`filter-pill ${projectFilter === "ALL" ? "active" : ""}`}
-                onClick={() => setProjectFilter("ALL")}
-              >
-                ALL PROJECTS ({projects.length})
-              </button>
-              <button
-                className={`filter-pill ${projectFilter === "DELIVERED" ? "active" : ""}`}
-                onClick={() => setProjectFilter("DELIVERED")}
-              >
-                DELIVERED ({projects.filter((p) => p.status === "Delivered").length})
-              </button>
-              <button
-                className={`filter-pill ${projectFilter === "PENDING" ? "active" : ""}`}
-                onClick={() => setProjectFilter("PENDING")}
-              >
-                IN DEVELOPMENT ({projects.filter((p) => p.status === "Pending").length})
-              </button>
-            </div>
           </section>
 
           <section className="showcase">
@@ -329,7 +309,7 @@ export default function CustomerMode() {
                   RETRY
                 </button>
               </div>
-            ) : filteredProjects.length === 0 ? (
+            ) : projects.length === 0 ? (
               <div className="empty-state glass-panel" style={{ padding: "40px", textAlign: "center" }}>
                 <div className="empty-icon">❖</div>
                 <h3>NO PROJECTS MATCH THIS FILTER</h3>
@@ -337,14 +317,8 @@ export default function CustomerMode() {
               </div>
             ) : (
               <div className="grid-v2">
-                {filteredProjects.map((project) => {
+                {projects.map((project) => {
                   const projIdStr = String(project._id || project.id);
-                  const projectReviews = reviews.filter((r) => {
-                    const rProjId = typeof r.projectId === "object" && r.projectId !== null
-                      ? String(r.projectId._id || r.projectId.id)
-                      : String(r.projectId);
-                    return rProjId === projIdStr;
-                  });
 
                   return (
                     <div key={projIdStr} className="project-card-v2 glass-panel animate-slide-up">
@@ -368,13 +342,8 @@ export default function CustomerMode() {
                           </div>
                         )}
 
-                        {/* Top Badges */}
+                        {/* Top Badges — Live demo only */}
                         <div className="card-top-badges">
-                          <span className={`status-pill ${project.status === "Delivered" ? "status-delivered" : "status-pending"}`}>
-                            <span className="status-pulse-dot"></span>
-                            {project.status || "Delivered"}
-                          </span>
-
                           {project.websiteUrl && (
                             <a
                               href={project.websiteUrl.startsWith("http") ? project.websiteUrl : `https://${project.websiteUrl}`}
@@ -382,9 +351,9 @@ export default function CustomerMode() {
                               rel="noopener noreferrer"
                               className="live-link-pill"
                               onClick={(e) => e.stopPropagation()}
-                              title="Visit Live Website"
+                              title="Visit Live Demo"
                             >
-                              🌐 Live Site ↗
+                              🌐 Live Demo ↗
                             </a>
                           )}
                         </div>
@@ -397,15 +366,12 @@ export default function CustomerMode() {
 
                       {/* Card Content Body */}
                       <div className="card-body">
-                        <div className="card-header-meta">
-                          <span className="customer-name-badge">
-                            Client: {project.customerName || "Enterprise Partner"}
-                          </span>
-                          {project.date && (
-                            <span className="project-date-badge">
-                              {new Date(project.date).toLocaleDateString("en-IN", { month: "short", year: "numeric" })}
-                            </span>
-                          )}
+                        {/* Star Rating Display */}
+                        <div className="card-star-rating">
+                          {[1,2,3,4,5].map((s) => (
+                            <span key={s} className="display-star">★</span>
+                          ))}
+                          <span className="star-label">Rate it!</span>
                         </div>
 
                         <h3 className="project-title" onClick={() => setInspectProject(project)}>
@@ -426,53 +392,28 @@ export default function CustomerMode() {
                           <div className="tech-badge-group">
                             <span className="tech-tag">CUSTOM SYSTEM</span>
                           </div>
-                        </div>
-
-                        {/* Client Reviews Section */}
-                        {projectReviews.length > 0 && (
-                          <div className="card-reviews-section">
-                            <span className="reviews-label">CLIENT REVIEWS ({projectReviews.length})</span>
-                            <div className="tags-container">
-                              {projectReviews.slice(0, 2).map((review) => (
-                                <div key={review._id || review.id} className="cloth-tag" title={review.text}>
-                                  <span className="tag-hole"></span>
-                                  <span className="tag-stars">
-                                    {review.stars ? "★".repeat(review.stars) : "★★★★★"}
-                                  </span>
-                                  <span className="tag-text">
-                                    {review.text.length > 25
-                                      ? review.text.substring(0, 25) + "..."
-                                      : review.text}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Card Action Controls */}
+                           {/* Card Action Controls */}
                         <div className="card-footer-actions">
                           <button
                             className="btn-card-inspect"
                             onClick={() => setInspectProject(project)}
                           >
-                            ✦ Inspect Details
+                            ❆ Inspect Details
                           </button>
 
-                          {/* All visitors can write a review on any WORK project */}
                           <button
-                            className="btn-card-review"
+                            className="btn-get-it"
                             onClick={() => {
-                              setReviewSubmitError(null);
-                              setReviewSubmitSuccess(false);
-                              setReviewAuthor("");
-                              setReviewText("");
-                              setReviewStars(5);
-                              setSelectedProject(projIdStr);
+                              setInterestName("");
+                              setInterestEmail("");
+                              setInterestMessage(`Hi ZER0ONE! I'm interested in "${project.name}". Please reach out to me.`);
+                              setInterestSuccess(false);
+                              setGetItProject(project);
                             }}
                           >
-                            ★ Write Review
+                            🚀 Get It
                           </button>
+                        </div>
                         </div>
                       </div>
                     </div>
@@ -577,22 +518,13 @@ export default function CustomerMode() {
                   </div>
                 </div>
               )}
-              <span className={`status-pill ${inspectProject.status === "Delivered" ? "status-delivered" : "status-pending"}`}>
+              <span className={`status-pill ${inspectProject.status === "Delivered" ? "status-delivered" : "status-pending"}`} style={{ display: "none" }}>
                 <span className="status-pulse-dot"></span>
                 {inspectProject.status || "Delivered"}
               </span>
             </div>
 
             <div className="inspect-details-body">
-              <div className="inspect-meta-row">
-                <span className="inspect-client-badge">CLIENT: {inspectProject.customerName || "Enterprise Partner"}</span>
-                {inspectProject.date && (
-                  <span className="inspect-date-badge">
-                    DELIVERED: {new Date(inspectProject.date).toLocaleDateString("en-IN", { month: "long", year: "numeric" })}
-                  </span>
-                )}
-              </div>
-
               <h2 className="inspect-project-name">{inspectProject.name}</h2>
 
               <div className="inspect-valuation-card">
@@ -644,6 +576,19 @@ export default function CustomerMode() {
 
               <div className="inspect-modal-actions">
                 <button
+                  className="btn-get-it"
+                  onClick={() => {
+                    setInterestName("");
+                    setInterestEmail("");
+                    setInterestMessage(`Hi ZER0ONE! I'm interested in "${inspectProject.name}". Please reach out to me.`);
+                    setInterestSuccess(false);
+                    setInspectProject(null);
+                    setGetItProject(inspectProject);
+                  }}
+                >
+                  🚀 Get It
+                </button>
+                <button
                   className="btn-secondary"
                   onClick={() => {
                     const projIdStr = String(inspectProject._id || inspectProject.id);
@@ -652,7 +597,7 @@ export default function CustomerMode() {
                     setSelectedProject(projIdStr);
                   }}
                 >
-                  ★ Write a Review for this Project
+                  ★ Write a Review
                 </button>
                 <button className="btn-back" onClick={() => setInspectProject(null)}>
                   Close
@@ -662,6 +607,71 @@ export default function CustomerMode() {
           </div>
         </div>
       )}
+      {/* Get It / Interest Modal */}
+      {getItProject && (
+        <div className="modal-overlay" onClick={() => { setGetItProject(null); setInterestSuccess(false); }}>
+          <div className="modal-content glass-panel" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={() => { setGetItProject(null); setInterestSuccess(false); }}>✕</button>
+            {interestSuccess ? (
+              <div style={{ textAlign: "center", padding: "28px 0" }}>
+                <div style={{ fontSize: "3rem", marginBottom: "12px" }}>🎉</div>
+                <h3 style={{ color: "#00e5ff", marginBottom: "8px" }}>We Got Your Vibe!</h3>
+                <p style={{ color: "#aaa", fontSize: "0.9rem" }}>
+                  Thanks for your interest in{" "}
+                  <strong style={{ color: "#fff" }}>{getItProject.name}</strong>.<br />
+                  Our team will reach out to you shortly!
+                </p>
+              </div>
+            ) : (
+              <>
+                <h2 style={{ marginBottom: "4px" }}>🚀 I Want This!</h2>
+                <p style={{ color: "#aaa", fontSize: "0.9rem", marginBottom: "20px" }}>
+                  Interested in{" "}
+                  <strong style={{ color: "#00eaff" }}>{getItProject.name}</strong>?{" "}
+                  Drop your details and we’ll reach out!
+                </p>
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  value={interestName}
+                  onChange={(e) => setInterestName(e.target.value)}
+                  style={{ width: "100%", marginBottom: "10px", padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.95rem", boxSizing: "border-box" }}
+                />
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  value={interestEmail}
+                  onChange={(e) => setInterestEmail(e.target.value)}
+                  style={{ width: "100%", marginBottom: "10px", padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.95rem", boxSizing: "border-box" }}
+                />
+                <textarea
+                  value={interestMessage}
+                  onChange={(e) => setInterestMessage(e.target.value)}
+                  placeholder="Tell us more about what you need..."
+                  style={{ width: "100%", minHeight: "90px", marginBottom: "16px", padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.95rem", resize: "vertical", boxSizing: "border-box" }}
+                />
+                <div className="modal-actions">
+                  <button type="button" onClick={() => { setGetItProject(null); setInterestSuccess(false); }}>Cancel</button>
+                  <button
+                    className="btn-get-it"
+                    onClick={() => {
+                      if (!interestName.trim() || !interestEmail.trim()) return;
+                      window.open(
+                        `mailto:contact@zerone.in?subject=${encodeURIComponent("Interest in " + getItProject.name)}&body=${encodeURIComponent(interestMessage + "\n\nFrom: " + interestName + "\nEmail: " + interestEmail)}`,
+                        "_blank"
+                      );
+                      setInterestSuccess(true);
+                    }}
+                  >
+                    🚀 Send Interest
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {showPayment && (
         <div className="modal-overlay" onClick={() => setShowPayment(false)}>
           <div className="modal-content glass-panel payment-modal" onClick={(e) => e.stopPropagation()}>

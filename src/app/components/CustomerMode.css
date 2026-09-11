@@ -423,6 +423,52 @@
   box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
 }
 
+/* Get It Button */
+.btn-get-it {
+  background: linear-gradient(135deg, #00eaff 0%, #7b2fff 100%);
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 12px rgba(0, 234, 255, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-get-it:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(0, 234, 255, 0.65), 0 0 30px rgba(123, 47, 255, 0.4);
+  background: linear-gradient(135deg, #33eeff 0%, #9955ff 100%);
+  color: #fff;
+}
+
+/* Card Star Rating Display */
+.card-star-rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.display-star {
+  color: #ffd700;
+  font-size: 0.95rem;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
+}
+
+.star-label {
+  font-size: 0.72rem;
+  color: #888;
+  margin-left: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* Card Hover Overlay */
 .card-hover-overlay {
   position: absolute;
