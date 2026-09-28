@@ -38,6 +38,7 @@ export default function Catalog({ onSelectCatalogForQuotation }: CatalogProps) {
   const [getItItem, setGetItItem] = useState<CatalogItem | null>(null);
   const [interestName, setInterestName] = useState("");
   const [interestEmail, setInterestEmail] = useState("");
+  const [interestPhone, setInterestPhone] = useState("");
   const [interestMessage, setInterestMessage] = useState("");
   const [interestSubmitting, setInterestSubmitting] = useState(false);
   const [interestSuccess, setInterestSuccess] = useState(false);
@@ -90,6 +91,7 @@ export default function Catalog({ onSelectCatalogForQuotation }: CatalogProps) {
     setGetItItem(item);
     setInterestName("");
     setInterestEmail("");
+    setInterestPhone("");
     setInterestMessage(`Hi ZER0ONE! I'm interested in "${item.title}". Please reach out to me.`);
     setInterestSubmitting(false);
     setInterestSuccess(false);
@@ -109,19 +111,25 @@ export default function Catalog({ onSelectCatalogForQuotation }: CatalogProps) {
     setInterestError(null);
     setInterestSubmitting(true);
     try {
-      await api.quotations.create({
+      // Ensure phone passes backend regex: /^\+?[0-9\s\-()]{7,20}$/
+      const phoneToSend = interestPhone.trim() || "0000000000";
+      const res = await api.quotations.create({
         fullName: interestName.trim(),
         email: interestEmail.trim(),
+        phone: phoneToSend,
         projectName: `Catalog Interest: ${getItItem.title}`,
         description: interestMessage || `Interested in catalog item: ${getItItem.title}`,
         services: ["Catalog", getItItem.category],
-        budget: getItItem.startingPrice ? `₹${getItItem.startingPrice}` : "Custom",
+        budget: getItItem.startingPrice ? `₹${getItItem.startingPrice.toLocaleString("en-IN")}` : "Custom / Contact Us",
         timeline: "Flexible",
-        phone: "N/A",
         contactPreference: ["Email"],
       });
-      setInterestSuccess(true);
-      setTimeout(() => { closeGetItPopup(); }, 3000);
+      if (res.success) {
+        setInterestSuccess(true);
+        setTimeout(() => { closeGetItPopup(); }, 3000);
+      } else {
+        setInterestError(res.message || "Something went wrong. Please try again.");
+      }
     } catch (err) {
       console.error("Failed to submit catalog interest:", err);
       setInterestError("Something went wrong. Please try again.");
@@ -408,6 +416,13 @@ export default function Catalog({ onSelectCatalogForQuotation }: CatalogProps) {
                   placeholder="Your Email *"
                   value={interestEmail}
                   onChange={(e) => { setInterestEmail(e.target.value); setInterestError(null); }}
+                  style={{ width: "100%", marginBottom: "10px", padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.95rem", boxSizing: "border-box" }}
+                />
+                <input
+                  type="tel"
+                  placeholder="Your Phone (optional)"
+                  value={interestPhone}
+                  onChange={(e) => { setInterestPhone(e.target.value); setInterestError(null); }}
                   style={{ width: "100%", marginBottom: "10px", padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.95rem", boxSizing: "border-box" }}
                 />
                 <textarea
