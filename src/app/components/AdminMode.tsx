@@ -1386,8 +1386,8 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
             </form>
 
             {/* Catalog Admin Table */}
-            <div className="table-responsive-container" style={{ marginTop: "25px" }}>
-              <table className="projects-table">
+            <div className="table-responsive" style={{ marginTop: "25px" }}>
+              <table className="data-table">
                 <thead>
                   <tr>
                     <th>Title / Slug</th>
@@ -1450,7 +1450,7 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
               <button className="modal-close-btn" onClick={() => setEditCatalogItem(null)}>✕</button>
             </div>
 
-            <form onSubmit={handleUpdateCatalog} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+            <form onSubmit={handleUpdateCatalog} className="admin-modal-form">
               <input
                 type="text"
                 placeholder="Title *"
@@ -1493,7 +1493,7 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                 style={{ padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.9rem" }}
               />
               {/* Edit Catalog Thumbnail File Chooser */}
-              <div style={{ gridColumn: "span 2" }}>
+              <div className="full-width-grid-item" style={{ gridColumn: "span 2" }}>
                 <input
                   type="file"
                   accept="image/*"
@@ -1502,7 +1502,7 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                   onChange={handleEditCatThumbnailFileChange}
                 />
                 {editCatalogItem.thumbnail ? (
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
                     <img src={editCatalogItem.thumbnail} alt="thumbnail preview" style={{ width: "60px", height: "40px", objectFit: "cover", borderRadius: "6px", border: "1px solid #333" }} />
                     <button type="button" className="btn-secondary" onClick={() => editCatThumbnailFileInputRef.current?.click()}>Change Thumbnail</button>
                     <button
@@ -1525,6 +1525,7 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                 onChange={(e) => setEditCatalogItem({ ...editCatalogItem, shortDescription: e.target.value })}
                 maxLength={250}
                 required
+                className="full-width-grid-item"
                 style={{ gridColumn: "span 2", padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.9rem" }}
               />
               <textarea
@@ -1532,6 +1533,7 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                 value={editCatalogItem.description || ""}
                 onChange={(e) => setEditCatalogItem({ ...editCatalogItem, description: e.target.value })}
                 rows={3}
+                className="full-width-grid-item"
                 style={{ gridColumn: "span 2", padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.9rem" }}
               />
               <input
@@ -1549,7 +1551,7 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                 style={{ padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.9rem" }}
               />
 
-              <div style={{ gridColumn: "span 2", display: "flex", gap: "24px", alignItems: "center", padding: "10px 14px", background: "rgba(255,255,255,0.04)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div className="form-checkbox-group full-width-grid-item" style={{ gridColumn: "span 2", display: "flex", gap: "24px", alignItems: "center", padding: "10px 14px", background: "rgba(255,255,255,0.04)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.08)" }}>
                 <label style={{ color: "#ccc", fontSize: "0.88rem", display: "flex", gap: "8px", alignItems: "center", cursor: "pointer" }}>
                   <input type="checkbox" checked={Boolean(editCatalogItem.published)} onChange={(e) => setEditCatalogItem({ ...editCatalogItem, published: e.target.checked })} />
                   Published (Publicly Visible)
@@ -1560,7 +1562,7 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                 </label>
               </div>
 
-              <div style={{ gridColumn: "span 2", display: "flex", gap: "10px", justifyContent: "flex-end", marginTop: "4px" }}>
+              <div className="full-width-grid-item modal-actions-row" style={{ gridColumn: "span 2", display: "flex", gap: "10px", justifyContent: "flex-end", marginTop: "4px" }}>
                 <button type="button" className="btn-back" onClick={() => setEditCatalogItem(null)}>Cancel</button>
                 <button type="submit" className="btn-primary" disabled={catSaving}>
                   {catSaving ? "Saving..." : "💾 Save Changes"}
@@ -1580,7 +1582,7 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
               <button className="modal-close-btn" onClick={() => setEditModalProject(null)}>✕</button>
             </div>
 
-            <form onSubmit={handleEditModalSave} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+            <form onSubmit={handleEditModalSave} className="admin-modal-form">
               {/* Customer Name */}
               <input
                 type="text"
@@ -1637,13 +1639,14 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                 placeholder="Technologies (comma-separated, e.g. React, Node.js)"
                 value={editModalTechnologies}
                 onChange={(e) => setEditModalTechnologies(e.target.value)}
+                className="full-width-grid-item"
                 style={{ gridColumn: "span 2", padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.9rem" }}
               />
               {/* Image Upload */}
-              <div style={{ gridColumn: "span 2" }}>
+              <div className="full-width-grid-item" style={{ gridColumn: "span 2" }}>
                 <input type="file" accept="image/*" ref={editModalFileInputRef} style={{ display: "none" }} onChange={handleEditModalImageChange} />
                 {editModalImageUrl ? (
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
                     <img src={editModalImageUrl} alt="preview" style={{ width: "60px", height: "40px", objectFit: "cover", borderRadius: "6px", border: "1px solid #333" }} />
                     <button type="button" className="btn-secondary" onClick={() => editModalFileInputRef.current?.click()}>Change Image</button>
                     <button type="button" style={{ background: "none", border: "none", color: "#ff5252", cursor: "pointer", fontSize: "1.1rem" }} onClick={() => setEditModalImageUrl("")}>✕ Remove</button>
@@ -1693,10 +1696,11 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                 value={editModalDescription}
                 onChange={(e) => setEditModalDescription(e.target.value)}
                 rows={3}
+                className="full-width-grid-item"
                 style={{ gridColumn: "span 2", width: "100%", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px", color: "#fff", padding: "10px", fontSize: "0.9rem", resize: "vertical" }}
               />
               {/* Section Checkboxes */}
-              <div style={{ gridColumn: "span 2", display: "flex", gap: "24px", alignItems: "center", padding: "10px 14px", background: "rgba(255,255,255,0.04)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div className="form-checkbox-group full-width-grid-item" style={{ gridColumn: "span 2", display: "flex", gap: "24px", alignItems: "center", padding: "10px 14px", background: "rgba(255,255,255,0.04)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.08)" }}>
                 <label style={{ color: "#ccc", fontSize: "0.88rem", display: "flex", gap: "8px", alignItems: "center", cursor: "pointer" }}>
                   <input type="checkbox" checked={editModalShowInWork} onChange={(e) => setEditModalShowInWork(e.target.checked)} />
                   Show in WORK Section
@@ -1708,10 +1712,10 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
               </div>
               {/* Error */}
               {editModalError && (
-                <div style={{ gridColumn: "span 2", color: "#ff5252", fontSize: "0.85rem" }}>⚠ {editModalError}</div>
+                <div className="full-width-grid-item" style={{ gridColumn: "span 2", color: "#ff5252", fontSize: "0.85rem" }}>⚠ {editModalError}</div>
               )}
               {/* Actions */}
-              <div style={{ gridColumn: "span 2", display: "flex", gap: "10px", justifyContent: "flex-end", marginTop: "4px" }}>
+              <div className="full-width-grid-item modal-actions-row" style={{ gridColumn: "span 2", display: "flex", gap: "10px", justifyContent: "flex-end", marginTop: "4px" }}>
                 <button type="button" className="btn-back" onClick={() => setEditModalProject(null)}>Cancel</button>
                 <button type="submit" className="btn-primary" disabled={editModalSaving}>
                   {editModalSaving ? "Saving..." : "💾 Save Changes"}
