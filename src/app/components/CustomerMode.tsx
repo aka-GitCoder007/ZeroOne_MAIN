@@ -38,6 +38,7 @@ export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
   const [getItProject, setGetItProject] = useState<Project | null>(null);
   const [interestName, setInterestName] = useState("");
   const [interestEmail, setInterestEmail] = useState("");
+  const [interestPhone, setInterestPhone] = useState("");
   const [interestMessage, setInterestMessage] = useState("");
   const [interestSuccess, setInterestSuccess] = useState(false);
 
@@ -469,6 +470,7 @@ export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
                             onClick={() => {
                               setInterestName("");
                               setInterestEmail("");
+                              setInterestPhone("");
                               setInterestMessage(`Hi ZER0ONE! I'm interested in "${project.name}". Please reach out to me.`);
                               setInterestSuccess(false);
                               setGetItProject(project);
@@ -679,6 +681,7 @@ export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
                   onClick={() => {
                     setInterestName("");
                     setInterestEmail("");
+                    setInterestPhone("");
                     setInterestMessage(`Hi ZER0ONE! I'm interested in "${inspectProject.name}". Please reach out to me.`);
                     setInterestSuccess(false);
                     setInspectProject(null);
@@ -743,6 +746,13 @@ export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
                   onChange={(e) => setInterestEmail(e.target.value)}
                   style={{ width: "100%", marginBottom: "10px", padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.95rem", boxSizing: "border-box" }}
                 />
+                <input
+                  type="tel"
+                  placeholder="Your Phone (optional)"
+                  value={interestPhone}
+                  onChange={(e) => setInterestPhone(e.target.value)}
+                  style={{ width: "100%", marginBottom: "10px", padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.95rem", boxSizing: "border-box" }}
+                />
                 <textarea
                   value={interestMessage}
                   onChange={(e) => setInterestMessage(e.target.value)}
@@ -755,18 +765,23 @@ export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
                     className="btn-get-it"
                     onClick={async () => {
                       if (!interestName.trim() || !interestEmail.trim()) return;
+                      // Ensure phone passes backend regex: /^\+?[0-9\s\-()]{7,20}$/
+                      const phoneToSend = interestPhone.trim() || "0000000000";
                       try {
-                        await api.quotations.create({
+                        const res = await api.quotations.create({
                           fullName: interestName,
                           email: interestEmail,
+                          phone: phoneToSend,
                           projectName: `Interest: ${getItProject.name}`,
                           description: interestMessage || `Interested in ${getItProject.name}`,
                           services: ["Innovation Hub"],
-                          budget: typeof getItProject.price === "number" ? `₹${getItProject.price}` : "Custom",
+                          budget: typeof getItProject.price === "number" ? `₹${getItProject.price.toLocaleString("en-IN")}` : "Custom / Contact Us",
                           timeline: "Flexible",
-                          phone: "N/A",
                           contactPreference: ["Email"],
                         });
+                        if (!res.success) {
+                          console.error("Get It quotation failed:", res.message);
+                        }
                       } catch (err) {
                         console.error("Failed to post interest quotation:", err);
                       }
