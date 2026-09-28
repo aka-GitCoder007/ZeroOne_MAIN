@@ -10,6 +10,12 @@ export interface Project {
   date: string;
   showInWork?: boolean;
   showInClientReviews?: boolean;
+  subtitle?: string;
+  description?: string;
+  category?: string;
+  badge?: string;
+  technologies?: string[];
+  ctaText?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -58,10 +64,17 @@ export interface Quotation {
   updatedAt: string;
 }
 
+export type UserRole =
+  | "super_admin"
+  | "admin"
+  | "innovation_manager"
+  | "client_review_manager"
+  | "catalog_manager";
+
 export interface AuthUser {
   id: string;
   username: string;
-  role: "admin" | string;
+  role: UserRole | string;
 }
 
 export interface AuthResponse {
@@ -107,3 +120,24 @@ export interface PaymentRecord {
   status: "Created" | "Paid" | "Failed" | string;
   createdAt?: string;
 }
+
+export interface CatalogItem {
+  _id?: string;
+  title: string;
+  slug: string;
+  category: string;
+  shortDescription: string;
+  description?: string;
+  thumbnail: string;
+  images?: string[];
+  demoUrl?: string;
+  technologies?: string[];
+  startingPrice?: number;
+  badge?: string;
+  featured?: boolean;
+  published?: boolean;
+  displayOrder?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+

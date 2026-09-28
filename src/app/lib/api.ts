@@ -6,7 +6,8 @@ import {
   Review,
   Quotation,
   DashboardMetrics,
-  PaymentRecord
+  PaymentRecord,
+  CatalogItem
 } from "../types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://zeroone-main-mx5h.onrender.com/api/v1";
@@ -217,6 +218,39 @@ export const api = {
       return request<PaymentRecord[]>("/payments", { method: "GET" });
     },
   },
+
+  // Catalog
+  catalog: {
+    getPublic: async (category?: string, featured?: boolean): Promise<ApiResponse<CatalogItem[]>> => {
+      const params = new URLSearchParams();
+      if (category && category.toLowerCase() !== "all") params.append("category", category);
+      if (featured !== undefined) params.append("featured", String(featured));
+      const query = params.toString() ? `?${params.toString()}` : "";
+      return request<CatalogItem[]>(`/catalog${query}`, { method: "GET" });
+    },
+    getBySlug: async (slug: string): Promise<ApiResponse<CatalogItem>> => {
+      return request<CatalogItem>(`/catalog/${encodeURIComponent(slug)}`, { method: "GET" });
+    },
+    getAdmin: async (): Promise<ApiResponse<CatalogItem[]>> => {
+      return request<CatalogItem[]>("/catalog/admin", { method: "GET" });
+    },
+    create: async (itemData: Partial<CatalogItem>): Promise<ApiResponse<CatalogItem>> => {
+      return request<CatalogItem>("/catalog", {
+        method: "POST",
+        body: JSON.stringify(itemData),
+      });
+    },
+    update: async (id: string, itemData: Partial<CatalogItem>): Promise<ApiResponse<CatalogItem>> => {
+      return request<CatalogItem>(`/catalog/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(itemData),
+      });
+    },
+    delete: async (id: string): Promise<ApiResponse<void>> => {
+      return request<void>(`/catalog/${id}`, { method: "DELETE" });
+    },
+  },
 };
 
 export default api;
+

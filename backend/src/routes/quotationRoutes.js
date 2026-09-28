@@ -1,7 +1,7 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { createQuotation, getQuotations, getQuotationById, updateQuotationStatus, deleteQuotation } from '../controllers/quotationController.js';
-import { protectAdmin } from '../middleware/authMiddleware.js';
+import { protectAdmin, authorizeRoles } from '../middleware/authMiddleware.js';
 import { validateQuotationPayload, validateObjectIdParam } from '../middleware/validationMiddleware.js';
 
 const router = express.Router();
@@ -19,9 +19,9 @@ const quotationSubmissionLimiter = rateLimit({
 });
 
 router.post('/', quotationSubmissionLimiter, validateQuotationPayload, createQuotation);
-router.get('/', protectAdmin, getQuotations);
-router.get('/:id', protectAdmin, validateObjectIdParam, getQuotationById);
-router.put('/:id', protectAdmin, validateObjectIdParam, updateQuotationStatus);
-router.delete('/:id', protectAdmin, validateObjectIdParam, deleteQuotation);
+router.get('/', protectAdmin, authorizeRoles('super_admin', 'admin'), getQuotations);
+router.get('/:id', protectAdmin, authorizeRoles('super_admin', 'admin'), validateObjectIdParam, getQuotationById);
+router.put('/:id', protectAdmin, authorizeRoles('super_admin', 'admin'), validateObjectIdParam, updateQuotationStatus);
+router.delete('/:id', protectAdmin, authorizeRoles('super_admin', 'admin'), validateObjectIdParam, deleteQuotation);
 
 export default router;

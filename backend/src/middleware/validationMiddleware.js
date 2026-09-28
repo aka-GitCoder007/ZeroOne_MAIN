@@ -128,6 +128,14 @@ export const validateProjectPayload = (req, res, next) => {
 
     if (customerName) req.body.customerName = sanitizeString(customerName, 100);
     if (name) req.body.name = sanitizeString(name, 100);
+    if (req.body.subtitle) req.body.subtitle = sanitizeString(req.body.subtitle, 200);
+    if (req.body.description) req.body.description = sanitizeString(req.body.description, 2000);
+    if (req.body.category) req.body.category = sanitizeString(req.body.category, 50);
+    if (req.body.badge) req.body.badge = sanitizeString(req.body.badge, 40);
+    if (req.body.ctaText) req.body.ctaText = sanitizeString(req.body.ctaText, 50);
+    if (Array.isArray(req.body.technologies)) {
+        req.body.technologies = req.body.technologies.map(t => sanitizeString(String(t), 30)).filter(Boolean);
+    }
 
     next();
 };

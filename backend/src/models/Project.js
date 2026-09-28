@@ -50,6 +50,35 @@ const projectSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
       index: true
+    },
+    subtitle: {
+      type: String,
+      trim: true,
+      maxlength: [200, 'Subtitle must be at most 200 characters long']
+    },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [2000, 'Description must be at most 2000 characters long']
+    },
+    category: {
+      type: String,
+      trim: true,
+      maxlength: [50, 'Category must be at most 50 characters long']
+    },
+    badge: {
+      type: String,
+      trim: true,
+      maxlength: [40, 'Badge must be at most 40 characters long']
+    },
+    technologies: {
+      type: [String],
+      default: []
+    },
+    ctaText: {
+      type: String,
+      trim: true,
+      maxlength: [50, 'CTA text must be at most 50 characters long']
     }
   },
   {

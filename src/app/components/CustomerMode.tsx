@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import ClientReviews from "./ClientReviews";
 import Quotation from "./Quotation";
-import { Project, Review } from "../types";
+import Catalog from "./Catalog";
+import { Project, Review, CatalogItem } from "../types";
 import api from "../lib/api";
 import "./CustomerMode.css";
 
@@ -12,7 +13,8 @@ interface CustomerModeProps {
 }
 
 export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
-  const [activeTab, setActiveTab] = useState<"work" | "reviews" | "quotation">("work");
+  const [activeTab, setActiveTab] = useState<"work" | "catalog" | "reviews" | "quotation">("work");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   
@@ -188,36 +190,55 @@ export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
     <div className="customer-mode animate-fade-in">
       {/* Header */}
       <header className="header glass-panel">
-        <div
-          className="logo-small text-replica"
-          onClick={() => setActiveTab("work")}
-          style={{ cursor: "pointer" }}
-        >
-          Z E R <span className="slashed-o">O</span> O N E
+        <div className="header-brand-row">
+          <div
+            className="logo-small text-replica"
+            onClick={() => { setActiveTab("work"); setMobileMenuOpen(false); }}
+            style={{ cursor: "pointer" }}
+          >
+            Z E R <span className="slashed-o">O</span> O N E
+          </div>
+
+          <button
+            className={`mobile-menu-toggle ${mobileMenuOpen ? "open" : ""}`}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Close navigation" : "Open navigation"}
+            type="button"
+          >
+            <span className="bar"></span>
+            <span className="bar"></span>
+            <span className="bar"></span>
+          </button>
         </div>
 
-        <nav className="header-nav">
+        <nav className={`header-nav ${mobileMenuOpen ? "open" : ""}`}>
           <button
             className={`nav-tab ${activeTab === "work" ? "active" : ""}`}
-            onClick={() => setActiveTab("work")}
+            onClick={() => { setActiveTab("work"); setMobileMenuOpen(false); }}
           >
             WORK
           </button>
           <button
+            className={`nav-tab ${activeTab === "catalog" ? "active" : ""}`}
+            onClick={() => { setActiveTab("catalog"); setMobileMenuOpen(false); }}
+          >
+            CATALOG
+          </button>
+          <button
             className={`nav-tab ${activeTab === "reviews" ? "active" : ""}`}
-            onClick={() => setActiveTab("reviews")}
+            onClick={() => { setActiveTab("reviews"); setMobileMenuOpen(false); }}
           >
             CLIENT REVIEWS
           </button>
           <button
             className={`nav-tab ${activeTab === "quotation" ? "active" : ""}`}
-            onClick={() => setActiveTab("quotation")}
+            onClick={() => { setActiveTab("quotation"); setMobileMenuOpen(false); }}
           >
             QUOTATION
           </button>
           <button
             className="btn-primary btn-pay"
-            onClick={() => setShowPayment(true)}
+            onClick={() => { setShowPayment(true); setMobileMenuOpen(false); }}
           >
             Pay Us
           </button>
@@ -227,6 +248,12 @@ export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
       {/* Main Content Area based on activeTab */}
       {activeTab === "quotation" ? (
         <Quotation onComplete={() => setActiveTab("work")} />
+      ) : activeTab === "catalog" ? (
+        <Catalog
+          onSelectCatalogForQuotation={(item: CatalogItem) => {
+            setActiveTab("quotation");
+          }}
+        />
       ) : activeTab === "reviews" ? (
         <ClientReviews
           projects={projects}
@@ -346,8 +373,13 @@ export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
                           </div>
                         )}
 
-                        {/* Top Badges — Live demo only */}
+                        {/* Top Badges — Live demo and custom badge */}
                         <div className="card-top-badges">
+                          {project.badge && (
+                            <span className="live-link-pill" style={{ background: "rgba(255, 171, 0, 0.15)", borderColor: "rgba(255, 171, 0, 0.4)", color: "#ffab00" }}>
+                              {project.badge}
+                            </span>
+                          )}
                           {project.websiteUrl && (
                             <a
                               href={project.websiteUrl.startsWith("http") ? project.websiteUrl : `https://${project.websiteUrl}`}
@@ -371,16 +403,35 @@ export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
                       {/* Card Content Body */}
                       <div className="card-body">
                         {/* Star Rating Display */}
-                        <div className="card-star-rating">
-                          {[1,2,3,4,5].map((s) => (
-                            <span key={s} className="display-star">★</span>
-                          ))}
-                          <span className="star-label">Rate it!</span>
+                        <div className="card-star-rating flex-between" style={{ width: "100%", marginBottom: "8px" }}>
+                          <div>
+                            {[1,2,3,4,5].map((s) => (
+                              <span key={s} className="display-star">★</span>
+                            ))}
+                            <span className="star-label" style={{ marginLeft: "6px" }}>Rate it!</span>
+                          </div>
+                          {project.category && (
+                            <span style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#00e5ff", background: "rgba(0, 229, 255, 0.1)", padding: "2px 8px", borderRadius: "4px" }}>
+                              {project.category}
+                            </span>
+                          )}
                         </div>
 
                         <h3 className="project-title" onClick={() => setInspectProject(project)}>
                           {project.name}
                         </h3>
+
+                        {project.subtitle && (
+                          <p style={{ fontSize: "0.85rem", color: "#00e5ff", margin: "-4px 0 8px 0", fontWeight: 500 }}>
+                            {project.subtitle}
+                          </p>
+                        )}
+
+                        {project.description && (
+                          <p style={{ fontSize: "0.88rem", color: "#94a3b8", margin: "0 0 12px 0", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                            {project.description}
+                          </p>
+                        )}
 
                         {/* Price & Valuation */}
                         <div className="card-price-row">
@@ -394,9 +445,17 @@ export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
                           </div>
                           
                           <div className="tech-badge-group">
-                            <span className="tech-tag">CUSTOM SYSTEM</span>
+                            {project.technologies && project.technologies.length > 0 ? (
+                              project.technologies.slice(0, 2).map((tech) => (
+                                <span key={tech} className="tech-tag">{tech}</span>
+                              ))
+                            ) : (
+                              <span className="tech-tag">CUSTOM SYSTEM</span>
+                            )}
                           </div>
-                           {/* Card Action Controls */}
+                        </div>
+
+                        {/* Card Action Controls */}
                         <div className="card-footer-actions">
                           <button
                             className="btn-card-inspect"
@@ -415,9 +474,8 @@ export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
                               setGetItProject(project);
                             }}
                           >
-                            🚀 Get It
+                            {project.ctaText || "🚀 Get It"}
                           </button>
-                        </div>
                         </div>
                       </div>
                     </div>
@@ -529,7 +587,44 @@ export default function CustomerMode({ onToggleAdmin }: CustomerModeProps) {
             </div>
 
             <div className="inspect-details-body">
+              <div style={{ display: "flex", gap: "8px", alignItems: "center", marginBottom: "6px" }}>
+                {inspectProject.category && (
+                  <span style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#00e5ff", background: "rgba(0, 229, 255, 0.1)", padding: "3px 10px", borderRadius: "6px" }}>
+                    {inspectProject.category}
+                  </span>
+                )}
+                {inspectProject.badge && (
+                  <span style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "1px", color: "#ffab00", background: "rgba(255, 171, 0, 0.12)", border: "1px solid rgba(255, 171, 0, 0.3)", padding: "3px 10px", borderRadius: "6px" }}>
+                    {inspectProject.badge}
+                  </span>
+                )}
+              </div>
+
               <h2 className="inspect-project-name">{inspectProject.name}</h2>
+              
+              {inspectProject.subtitle && (
+                <p style={{ fontSize: "1rem", color: "#00e5ff", margin: "-6px 0 16px 0", fontWeight: 500 }}>
+                  {inspectProject.subtitle}
+                </p>
+              )}
+
+              {inspectProject.description && (
+                <div style={{ background: "rgba(15, 23, 42, 0.6)", border: "1px solid rgba(255, 255, 255, 0.08)", borderRadius: "12px", padding: "16px", marginBottom: "20px" }}>
+                  <h4 style={{ fontSize: "0.85rem", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "1px", margin: "0 0 8px 0" }}>OVERVIEW</h4>
+                  <p style={{ color: "#e2e8f0", fontSize: "0.95rem", lineHeight: 1.6, margin: 0 }}>{inspectProject.description}</p>
+                </div>
+              )}
+
+              {inspectProject.technologies && inspectProject.technologies.length > 0 && (
+                <div style={{ marginBottom: "20px" }}>
+                  <h4 style={{ fontSize: "0.85rem", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "1px", margin: "0 0 8px 0" }}>TECH STACK</h4>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                    {inspectProject.technologies.map(t => (
+                      <span key={t} style={{ background: "rgba(255, 255, 255, 0.06)", border: "1px solid rgba(255, 255, 255, 0.12)", color: "#94a3b8", padding: "4px 10px", borderRadius: "6px", fontSize: "0.82rem" }}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="inspect-valuation-card">
                 <div className="valuation-info">

@@ -6,6 +6,7 @@ import Project from './models/Project.js';
 import Review from './models/Review.js';
 import Quotation from './models/Quotation.js';
 import Payment from './models/Payment.js';
+import Catalog from './models/Catalog.js';
 import { generateRequestId } from './utils/generateRequestId.js';
 
 dotenv.config();
@@ -29,6 +30,7 @@ const runTests = async () => {
     await Project.deleteMany({ name: 'Test Project Temp' });
     await Payment.deleteMany({ orderId: 'test_order_id_temp' });
     await Quotation.deleteMany({ email: 'test_temp@zeroone.com' });
+    await Catalog.deleteMany({ slug: 'test-catalog-temp' });
 
     // 2. Validate User Model
     console.log('\n[1/5] Testing User Model Validation...');
@@ -139,13 +141,36 @@ const runTests = async () => {
     await validPayment.save();
     console.log('  ✅ Payment: Valid document saved successfully.');
 
-    // 7. Cleanup Test Data
+    // 7. Validate Catalog Model
+    console.log('\n[6/6] Testing Catalog Model Validation...');
+    const invalidCatalog = new Catalog({ startingPrice: -50 });
+    try {
+      await invalidCatalog.save();
+      console.error('❌ Catalog: Validation failed to catch negative starting price!');
+    } catch (err) {
+      console.log('  ✅ Catalog: Validation correctly caught invalid fields:', err.message);
+    }
+
+    const validCatalog = new Catalog({
+      title: 'Test Gym App',
+      slug: 'test-catalog-temp',
+      category: 'Gym',
+      shortDescription: 'Modern gym app template',
+      thumbnail: 'https://example.com/thumb.png',
+      startingPrice: 25000,
+      published: true
+    });
+    const savedCatalog = await validCatalog.save();
+    console.log('  ✅ Catalog: Valid document saved successfully.');
+
+    // 8. Cleanup Test Data
     console.log('\nCleaning up test documents...');
     await User.findByIdAndDelete(validUser._id);
     await Review.findByIdAndDelete(savedReview._id);
     await Project.findByIdAndDelete(savedProject._id);
     await Quotation.findByIdAndDelete(savedQuotation._id);
     await Payment.findByIdAndDelete(validPayment._id);
+    await Catalog.findByIdAndDelete(savedCatalog._id);
     console.log('✅ Cleanup completed successfully.');
     
     console.log('\nDatabase Schema Verification: PASSED 🚀');

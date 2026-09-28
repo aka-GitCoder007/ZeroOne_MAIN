@@ -1,6 +1,14 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
+const VALID_ADMIN_ROLES = [
+    'super_admin',
+    'admin',
+    'innovation_manager',
+    'client_review_manager',
+    'catalog_manager'
+];
+
 /**
  * Protect middleware: Verifies JWT bearer token and attaches user to request object.
  */
@@ -37,10 +45,10 @@ export const protectAdmin = async (req, res, next) => {
             });
         }
 
-        if (user.role !== 'admin') {
+        if (!VALID_ADMIN_ROLES.includes(user.role)) {
             return res.status(403).json({
                 success: false,
-                message: 'Access denied: Admin role required'
+                message: 'Access denied: Valid administrative role required'
             });
         }
 
@@ -54,6 +62,37 @@ export const protectAdmin = async (req, res, next) => {
     }
 };
 
+/**
+ * Authorize middleware factory: Restricts route access to specific roles.
+ * super_admin and admin always bypass role restriction.
+ */
+export const authorizeRoles = (...allowedRoles) => {
+    return (req, res, next) => {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Not authorized'
+            });
+        }
+
+        const role = req.user.role;
+
+        if (role === 'super_admin' || role === 'admin') {
+            return next();
+        }
+
+        if (!allowedRoles.includes(role)) {
+            return res.status(403).json({
+                success: false,
+                message: 'Forbidden: Insufficient permissions'
+            });
+        }
+
+        next();
+    };
+};
+
 export default {
-    protectAdmin
+    protectAdmin,
+    authorizeRoles
 };

@@ -2,7 +2,7 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { getReviews, createReview, updateReview, deleteReview } from '../controllers/reviewController.js';
 import { validateReviewPayload, validateObjectIdParam } from '../middleware/validationMiddleware.js';
-import { protectAdmin } from '../middleware/authMiddleware.js';
+import { protectAdmin, authorizeRoles } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -20,8 +20,8 @@ const reviewSubmissionLimiter = rateLimit({
 
 router.get('/', getReviews);
 router.post('/', reviewSubmissionLimiter, validateReviewPayload, createReview);
-router.put('/:id', protectAdmin, validateObjectIdParam, updateReview);
-router.delete('/:id', protectAdmin, validateObjectIdParam, deleteReview);
+router.put('/:id', protectAdmin, authorizeRoles('client_review_manager'), validateObjectIdParam, updateReview);
+router.delete('/:id', protectAdmin, authorizeRoles('client_review_manager'), validateObjectIdParam, deleteReview);
 
 export default router;
 

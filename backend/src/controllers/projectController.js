@@ -65,7 +65,23 @@ export const getProjectById = async (req, res, next) => {
  */
 export const createProject = async (req, res, next) => {
     try {
-        const { customerName, name, price, image, websiteUrl, status, date, showInWork, showInClientReviews } = req.body;
+        const {
+            customerName,
+            name,
+            price,
+            image,
+            websiteUrl,
+            status,
+            date,
+            showInWork,
+            showInClientReviews,
+            subtitle,
+            description,
+            category,
+            badge,
+            technologies,
+            ctaText
+        } = req.body;
 
         const project = await Project.create({
             customerName,
@@ -76,7 +92,13 @@ export const createProject = async (req, res, next) => {
             status,
             date: date || new Date(),
             showInWork: showInWork !== undefined ? showInWork : true,
-            showInClientReviews: showInClientReviews !== undefined ? showInClientReviews : false
+            showInClientReviews: showInClientReviews !== undefined ? showInClientReviews : false,
+            subtitle,
+            description,
+            category,
+            badge,
+            technologies: Array.isArray(technologies) ? technologies : [],
+            ctaText
         });
 
         res.status(201).json({

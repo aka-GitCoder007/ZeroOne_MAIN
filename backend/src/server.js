@@ -15,6 +15,7 @@ import reviewRoutes from './routes/reviewRoutes.js';
 import quotationRoutes from './routes/quotationRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import catalogRoutes from './routes/catalogRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -106,6 +107,7 @@ app.use('/api/v1/reviews', reviewRoutes);
 app.use('/api/v1/quotations', quotationRoutes);
 app.use('/api/v1/payments', paymentRoutes);
 app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/catalog', catalogRoutes);
 
 // Central Error Handler Middleware
 app.use(errorHandler);
