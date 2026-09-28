@@ -994,8 +994,8 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                 style={{ gridColumn: "span 2", width: "100%", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px", color: "#fff", padding: "10px", fontSize: "0.9rem", resize: "vertical" }}
               />
 
-              <div style={{ display: "flex", gap: "15px", alignItems: "center", gridColumn: "span 2" }}>
-                <label style={{ color: "#aaa", fontSize: "0.85rem", display: "flex", gap: "5px", alignItems: "center" }}>
+              <div className="form-checkbox-group">
+                <label>
                   <input
                     type="checkbox"
                     checked={newShowInWork}
@@ -1003,7 +1003,7 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                   />
                   Show in WORK Section
                 </label>
-                <label style={{ color: "#aaa", fontSize: "0.85rem", display: "flex", gap: "5px", alignItems: "center" }}>
+                <label>
                   <input
                     type="checkbox"
                     checked={newShowInClientReviews}
@@ -1367,12 +1367,12 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                 onChange={(e) => setCatDisplayOrder(e.target.value)}
               />
 
-              <div style={{ gridColumn: "span 2", display: "flex", gap: "24px", alignItems: "center", padding: "10px 14px", background: "rgba(255,255,255,0.04)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.08)" }}>
-                <label style={{ color: "#ccc", fontSize: "0.88rem", display: "flex", gap: "8px", alignItems: "center", cursor: "pointer" }}>
+              <div className="form-checkbox-group">
+                <label>
                   <input type="checkbox" checked={catPublished} onChange={(e) => setCatPublished(e.target.checked)} />
                   Published (Publicly Visible)
                 </label>
-                <label style={{ color: "#ccc", fontSize: "0.88rem", display: "flex", gap: "8px", alignItems: "center", cursor: "pointer" }}>
+                <label>
                   <input type="checkbox" checked={catFeatured} onChange={(e) => setCatFeatured(e.target.checked)} />
                   Featured Concept
                 </label>
@@ -1551,12 +1551,12 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                 style={{ padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontSize: "0.9rem" }}
               />
 
-              <div className="form-checkbox-group full-width-grid-item" style={{ gridColumn: "span 2", display: "flex", gap: "24px", alignItems: "center", padding: "10px 14px", background: "rgba(255,255,255,0.04)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.08)" }}>
-                <label style={{ color: "#ccc", fontSize: "0.88rem", display: "flex", gap: "8px", alignItems: "center", cursor: "pointer" }}>
+              <div className="form-checkbox-group full-width-grid-item">
+                <label>
                   <input type="checkbox" checked={Boolean(editCatalogItem.published)} onChange={(e) => setEditCatalogItem({ ...editCatalogItem, published: e.target.checked })} />
                   Published (Publicly Visible)
                 </label>
-                <label style={{ color: "#ccc", fontSize: "0.88rem", display: "flex", gap: "8px", alignItems: "center", cursor: "pointer" }}>
+                <label>
                   <input type="checkbox" checked={Boolean(editCatalogItem.featured)} onChange={(e) => setEditCatalogItem({ ...editCatalogItem, featured: e.target.checked })} />
                   Featured Concept
                 </label>
@@ -1700,12 +1700,12 @@ export default function AdminMode({ onLogout }: { onLogout: () => void }) {
                 style={{ gridColumn: "span 2", width: "100%", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px", color: "#fff", padding: "10px", fontSize: "0.9rem", resize: "vertical" }}
               />
               {/* Section Checkboxes */}
-              <div className="form-checkbox-group full-width-grid-item" style={{ gridColumn: "span 2", display: "flex", gap: "24px", alignItems: "center", padding: "10px 14px", background: "rgba(255,255,255,0.04)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.08)" }}>
-                <label style={{ color: "#ccc", fontSize: "0.88rem", display: "flex", gap: "8px", alignItems: "center", cursor: "pointer" }}>
+              <div className="form-checkbox-group full-width-grid-item">
+                <label>
                   <input type="checkbox" checked={editModalShowInWork} onChange={(e) => setEditModalShowInWork(e.target.checked)} />
                   Show in WORK Section
                 </label>
-                <label style={{ color: "#ccc", fontSize: "0.88rem", display: "flex", gap: "8px", alignItems: "center", cursor: "pointer" }}>
+                <label>
                   <input type="checkbox" checked={editModalShowInClientReviews} onChange={(e) => setEditModalShowInClientReviews(e.target.checked)} />
                   Show in CLIENT REVIEWS Section
                 </label>
